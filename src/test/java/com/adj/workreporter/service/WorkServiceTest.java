@@ -8,17 +8,15 @@ import org.junit.Test;
 
 import java.time.Instant;
 
-import static org.junit.Assert.*;
-
 /**
  * test
  * Created by dhx on 2017/4/10.
  */
-public class FileServiceTest {
-    private FileService fileService;
+public class WorkServiceTest {
+    private WorkService fileService;
     @Before
     public void setUp() throws Exception {
-        fileService  = new FileService();
+        fileService  = new WorkService();
     }
 
     @After

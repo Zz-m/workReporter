@@ -1,13 +1,16 @@
 package com.adj.workreporter;
 
 
+import com.adj.workreporter.model.Work;
+import com.adj.workreporter.service.WorkService;
+import com.adj.workreporter.util.SqlUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 
 import java.io.*;
+import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -18,16 +21,29 @@ import java.util.Scanner;
 public class WorkReporter {
     public static void main(String[] args) {
         try {
-            readString5();
+            init();
+            start();
+            shutDown();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    private static void init() throws Exception {
+        SqlUtil.init();
+    }
+
+    private static void start() throws Exception{
+        testSave();
+    }
+
+    private static void shutDown() throws Exception {
+        SqlUtil.close();
+    }
 
 
     private static void readString5() throws Exception {
-        while(true) {
+        while (true) {
             Scanner scanner = new Scanner(System.in);
             String s = scanner.nextLine();
             if ("0".equals(s))
@@ -53,15 +69,11 @@ public class WorkReporter {
         System.out.println(data.get("asd"));
     }
 
-    private static void testSave() throws IOException {
-        Map<String, String> data = new HashMap<>();
-        data.put("asd", "123");
-        FileOutputStream fileOutputStream = new FileOutputStream("asd");
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-        objectOutputStream.writeObject(data);
-        objectOutputStream.close();
+    private static void testSave() throws SQLException {
+        WorkService workService = new WorkService();
+        Work work = new Work(Instant.now().getEpochSecond(), "测试保存的work");
+        workService.saveWork(work);
     }
-
 
 
     private static void testCreateCell() throws IOException {
