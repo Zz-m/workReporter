@@ -4,6 +4,7 @@ package com.adj.workreporter;
 import com.adj.workreporter.model.Work;
 import com.adj.workreporter.service.WorkService;
 import com.adj.workreporter.util.SqlUtil;
+import com.adj.workreporter.worker.DailyGatherWorker;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 
@@ -14,6 +15,8 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Scanner;
 
+import static com.adj.workreporter.Constants.DATA_DIR_URL;
+
 /**
  * 工作报告
  * Created by dhx on 2017/4/10.
@@ -22,7 +25,7 @@ public class WorkReporter {
     public static void main(String[] args) {
         try {
             init();
-            start();
+            start(args);
             shutDown();
         } catch (Exception e) {
             e.printStackTrace();
@@ -30,11 +33,23 @@ public class WorkReporter {
     }
 
     private static void init() throws Exception {
+        File file = new File(DATA_DIR_URL);
+        if (!file.exists()) {
+            boolean success = file.mkdirs();
+            if (!success)
+                throw new RuntimeException("mkdir fail");
+        }
         SqlUtil.init();
     }
 
-    private static void start() throws Exception{
-        testSave();
+    private static void start(String[] args) throws Exception {
+        if (args.length > 0) {
+            if (args[0].equals("g")) {
+                new DailyGatherWorker().gather();
+            }
+        } else {
+            System.out.println("呵呵 over");
+        }
     }
 
     private static void shutDown() throws Exception {

@@ -9,12 +9,13 @@ import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
 
+import static com.adj.workreporter.Constants.DATABASE_URL;
+
 /**
  * 数据库工具
  * Created by dhx on 2017/4/11.
  */
 public class SqlUtil {
-    private final static String DATABASE_URL = "jdbc:sqlite:target/works.db";
     private static ConnectionSource connectionSource;
     private static Dao<Work, Integer> workDao;
 
