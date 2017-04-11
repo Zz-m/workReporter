@@ -1,15 +1,15 @@
 package com.adj.workreporter;
 
-import com.adj.workreporter.model.DayWorks;
+
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 
 import java.io.*;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 /**
  * 工作报告
@@ -18,11 +18,24 @@ import java.util.Map;
 public class WorkReporter {
     public static void main(String[] args) {
         try {
-            DayWorks dayWorks = new DayWorks();
-            LocalDate localDate = LocalDate.parse("2017-04-10");
-            System.out.println(localDate.getDayOfWeek());
+            readString5();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+
+
+    private static void readString5() throws Exception {
+        while(true) {
+            Scanner scanner = new Scanner(System.in);
+            String s = scanner.nextLine();
+            if ("0".equals(s))
+                break;
+            if ("1".equals(s))
+                System.out.println("1");
+            else
+                System.out.println(s);
         }
     }
 
