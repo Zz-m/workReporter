@@ -10,6 +10,8 @@ import com.j256.ormlite.dao.DaoManager;
 
 import java.io.*;
 import java.sql.SQLException;
+import java.time.Instant;
+import java.util.List;
 
 /**
  * 数据持久化service
@@ -25,5 +27,10 @@ public class WorkService {
 
     public void saveWork(Work work) throws SQLException {
         workDao.create(work);
+    }
+
+    public List<Work> queryWorksInPeriod(long startEpochSecond, long endEpochSecond) throws SQLException {
+        return workDao.queryBuilder().where().ge(Work.EPOCH_SECOND_FIELD_NAME, startEpochSecond).and()
+                .le(Work.EPOCH_SECOND_FIELD_NAME, endEpochSecond).query();
     }
 }

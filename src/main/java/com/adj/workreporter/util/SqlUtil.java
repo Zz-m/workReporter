@@ -6,6 +6,8 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 
@@ -16,6 +18,7 @@ import static com.adj.workreporter.Constants.DATABASE_URL;
  * Created by dhx on 2017/4/11.
  */
 public class SqlUtil {
+    private static final Logger logger = LoggerFactory.getLogger(SqlUtil.class);
     private static ConnectionSource connectionSource;
     private static Dao<Work, Integer> workDao;
 
@@ -27,7 +30,7 @@ public class SqlUtil {
         workDao = DaoManager.createDao(connectionSource, Work.class);
 
         // read and write some data
-        System.out.println("\n\nIt seems to have worked\n\n");
+        logger.debug("\n\nIt seems to have worked\n\n");
     }
 
     /**

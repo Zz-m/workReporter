@@ -7,6 +7,7 @@ package com.adj.workreporter;
 public class Constants {
     public static final String DATA_DIR_URL = "target/";
     public static final String DAILY_WORKS_DATA_URL = DATA_DIR_URL + "today.txt";
+    public static final String LOG_URL = DATA_DIR_URL + "logback";
 //    public static final String OUTPUT_DIR = "target/out";
 
 

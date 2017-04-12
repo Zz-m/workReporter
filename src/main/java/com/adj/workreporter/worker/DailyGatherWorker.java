@@ -3,6 +3,8 @@ package com.adj.workreporter.worker;
 import com.adj.workreporter.Constants;
 import com.adj.workreporter.model.Work;
 import com.adj.workreporter.service.WorkService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,20 +19,21 @@ import java.util.Scanner;
  * Created by dhx on 2017/4/11.
  */
 public class DailyGatherWorker {
+    private Logger logger = LoggerFactory.getLogger(DailyGatherWorker.class);
 
     private WorkService workService = new WorkService();
 
     public void gather() throws FileNotFoundException, SQLException {
         File dailyFile = new File(Constants.DAILY_WORKS_DATA_URL);
         if (!dailyFile.exists()) {
-            System.out.println("文件不存在 url： " + dailyFile.toURI());
+            logger.debug("文件不存在 url： " + dailyFile.toURI());
             return;
         }
 
         try (Scanner scanner = new Scanner(new FileInputStream(dailyFile))) {
             while (scanner.hasNext()) {
                 String msg = scanner.nextLine();
-                System.out.println("工作内容： " + msg);
+                logger.debug("工作内容： " + msg);
                 if (msg != null && msg.trim().length() > 0) {
                     Work work = new Work(Instant.now().getEpochSecond(), msg.trim());
                     workService.saveWork(work);
