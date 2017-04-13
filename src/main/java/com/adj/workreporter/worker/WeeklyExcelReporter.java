@@ -165,7 +165,7 @@ public class WeeklyExcelReporter {
         String thisFridayString = DateTimeUtil.getFridayOfWeek(nowDate).toString();
         cell1.setCellValue(thisMondayString + " 至 " + thisFridayString);
         cell2.setCellValue("汇报人");
-        cell3.setCellValue("邓晗熙asdasdasdasd\nasdasdasdasdasdasd");
+        cell3.setCellValue("邓晗熙");
     }
 
     private void setupWorksThisWeek(XSSFWorkbook workbook, XSSFSheet sheet, List<Work> worksOfThisWeek) {
