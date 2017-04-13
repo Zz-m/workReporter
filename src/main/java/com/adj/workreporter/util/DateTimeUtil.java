@@ -19,4 +19,13 @@ public class DateTimeUtil {
         LocalDateTime weekBegin = dateTime.with(DayOfWeek.SUNDAY).toLocalDateTime().with(LocalTime.MAX);
         return weekBegin.toEpochSecond(ZoneId.systemDefault().getRules().getOffset(weekBegin));
     }
+
+    public static LocalDate getMondayOfWeek(LocalDate someDate) {
+        return someDate.with(DayOfWeek.MONDAY);
+    }
+
+    public static LocalDate getFridayOfWeek(LocalDate someDate) {
+        return someDate.with(DayOfWeek.FRIDAY);
+    }
+
 }
