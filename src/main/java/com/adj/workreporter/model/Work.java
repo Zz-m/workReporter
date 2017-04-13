@@ -35,4 +35,13 @@ public class Work {
     public String getMessage() {
         return message;
     }
+
+    @Override
+    public String toString() {
+        return "Work{" +
+                "id=" + id +
+                ", epochSecond=" + epochSecond +
+                ", message='" + message + '\'' +
+                '}';
+    }
 }

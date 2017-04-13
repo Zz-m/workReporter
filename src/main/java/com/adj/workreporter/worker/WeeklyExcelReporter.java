@@ -1,5 +1,9 @@
 package com.adj.workreporter.worker;
 
+import com.adj.workreporter.model.Work;
+import com.adj.workreporter.service.WorkService;
+import com.adj.workreporter.util.DateTimeUtil;
+import com.j256.ormlite.stmt.query.In;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
@@ -7,7 +11,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.sql.SQLException;
+import java.time.*;
+import java.util.List;
 
 /**
  * 每周工作报告excel生成
@@ -16,18 +22,19 @@ import java.time.LocalDateTime;
 public class WeeklyExcelReporter {
 
     private Logger logger = LoggerFactory.getLogger(WeeklyExcelReporter.class);
+    private WorkService workService = new WorkService();
 
     public void generateReport() {
         logger.debug("generateReport");
-    }
-
-    private long getWeekStartEpochSecond(long someMoment) {
-//        LocalDateTime dateTime = LocalDateTime
-        return 1;
-    }
-
-    private long getWeekEndEpochSecond(long someMoment) {
-        return 1;
+        long now = Instant.now().getEpochSecond();
+        try {
+            List<Work> worksOfThisWeek = workService.queryWorksInPeriod(DateTimeUtil.getWeekStartEpochSecond(now), DateTimeUtil.getWeekEndEpochSecond(now));
+            for (Work work : worksOfThisWeek) {
+                logger.info(work.toString());
+            }
+        } catch (SQLException e) {
+            logger.error("查询周工作异常", e);
+        }
     }
 
     private static void testCreateCell() throws IOException {
@@ -53,4 +60,5 @@ public class WeeklyExcelReporter {
         wb.write(fileOut);
         fileOut.close();
     }
+
 }
