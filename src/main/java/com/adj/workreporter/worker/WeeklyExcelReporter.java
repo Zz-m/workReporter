@@ -9,6 +9,8 @@ import org.apache.poi.xssf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.*;
+import java.awt.Color;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -131,6 +133,7 @@ public class WeeklyExcelReporter {
         titleStyle.setAlignment(HorizontalAlignment.CENTER);
         titleStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         titleStyle.setFont(titleFont);
+        titleStyle.setFillBackgroundColor(new XSSFColor(Color.blue));
         XSSFRow firstRow = sheet.createRow((short) 0);
 //        sheet.autoSizeColumn(0);
         XSSFCell titleCell = firstRow.createCell((short) 0);
