@@ -3,6 +3,8 @@ package com.adj.workreporter.worker;
 import com.adj.workreporter.model.Work;
 import com.adj.workreporter.service.WorkService;
 import com.adj.workreporter.util.DateTimeUtil;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFPalette;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.*;
@@ -90,6 +92,7 @@ public class WeeklyExcelReporter {
 
         setupTitle(workbook, sheet);
         setupInfo(workbook, sheet);
+        setupWorksThisWeek(workbook, sheet, worksOfThisWeek);
 
 
         int columnNum = 0;
@@ -133,7 +136,10 @@ public class WeeklyExcelReporter {
         titleStyle.setAlignment(HorizontalAlignment.CENTER);
         titleStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         titleStyle.setFont(titleFont);
-        titleStyle.setFillBackgroundColor(new XSSFColor(Color.blue));
+        titleStyle.setFillForegroundColor(getForeGroundColor());
+
+        //solid 填充  foreground  前景色
+        titleStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
         XSSFRow firstRow = sheet.createRow((short) 0);
 //        sheet.autoSizeColumn(0);
         XSSFCell titleCell = firstRow.createCell((short) 0);
@@ -151,8 +157,12 @@ public class WeeklyExcelReporter {
         boldCellStyle.setFont(blackFont);
         boldCellStyle.setAlignment(HorizontalAlignment.CENTER);
         boldCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        boldCellStyle.setFillForegroundColor(getForeGroundColor());
+        boldCellStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
         XSSFCellStyle normalStyle = workbook.createCellStyle();
         normalStyle.setFont(normalFont);
+        normalStyle.setFillForegroundColor(getForeGroundColor());
+        normalStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
         XSSFRow secondRow = sheet.createRow((short) 1);
         XSSFCell cell0 = secondRow.createCell(0);
         XSSFCell cell1 = secondRow.createCell(1);
@@ -189,10 +199,21 @@ public class WeeklyExcelReporter {
 //        style0.set
 
         XSSFRow thirdRow = sheet.createRow(2);
+        thirdRow.setHeightInPoints((short) 75);
         XSSFCell cell0 = thirdRow.createCell(0);
         XSSFCell cell1 = thirdRow.createCell(1);
+        cell0.setCellValue("本周工作内容");
+        cell0.setCellStyle(style0);
 
 
+    }
+
+    private XSSFColor getForeGroundColor() {
+        byte[] rgb = new byte[3];
+        rgb[0] = (byte) 192; // red
+        rgb[1] = (byte) 217; // green
+        rgb[2] = (byte) 241; // blue
+        return new XSSFColor(rgb); // #f2dcdb
     }
 
 }
