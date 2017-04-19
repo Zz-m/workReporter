@@ -7,6 +7,7 @@ import com.adj.workreporter.util.LogbackUtil;
 import com.adj.workreporter.util.SqlUtil;
 import com.adj.workreporter.worker.DailyGatherWorker;
 import com.adj.workreporter.worker.WeeklyExcelReporter;
+import com.adj.workreporter.worker.WeeklySimpleReporter;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
@@ -27,6 +28,7 @@ import static com.adj.workreporter.Constants.DATA_DIR_URL;
  */
 public class WorkReporter {
     private static final Logger logger = LoggerFactory.getLogger(WorkReporter.class);
+
     public static void main(String[] args) {
         try {
             init();
@@ -50,12 +52,17 @@ public class WorkReporter {
 
     private static void start(String[] args) throws Exception {
         if (args.length > 0) {
-            if (args[0].equals("g")) {
+            if (args[0].equals("-d")) {
+                logger.debug("-d");
                 new DailyGatherWorker().gather();
+            } else if (args[0].equals("-week")) {
+                logger.debug("-week");
+                new WeeklySimpleReporter().generateReport();
+            } else {
+                logger.error("未知参数{}", args[0]);
             }
         } else {
-            new WeeklyExcelReporter().generateReport();
-            logger.debug("呵呵 over");
+            logger.error("没有参数");
         }
     }
 
@@ -84,19 +91,18 @@ public class WorkReporter {
         logger.debug("dateTime: " + dateTime);
     }
 
-    private static void testRead() throws IOException, ClassNotFoundException {
-        ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream("asd"));
-        Map<String, String> data = (Map<String, String>) objectInputStream.readObject();
-        logger.debug(data.get("a123"));
-        logger.debug(data.get("asd"));
-    }
+//    private static void testRead() throws IOException, ClassNotFoundException {
+//        ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream("asd"));
+//        Map<String, String> data = (Map<String, String>) objectInputStream.readObject();
+//        logger.debug(data.get("a123"));
+//        logger.debug(data.get("asd"));
+//    }
 
     private static void testSave() throws SQLException {
         WorkService workService = new WorkService();
         Work work = new Work(Instant.now().getEpochSecond(), "测试保存的work");
         workService.saveWork(work);
     }
-
 
 
 }
