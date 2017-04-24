@@ -4,7 +4,6 @@ import com.adj.workreporter.Constants;
 import com.adj.workreporter.model.Work;
 import com.adj.workreporter.service.WorkService;
 import com.adj.workreporter.util.DateTimeUtil;
-import org.apache.poi.ss.usermodel.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +28,7 @@ public class WeeklySimpleReporter {
         try {
             new DailyGatherWorker().gather();
             List<Work> workList = workService.queryWorksInPeriod(DateTimeUtil.getWeekStartEpochSecond(now), DateTimeUtil.getWeekEndEpochSecond(now));
-            File weekReport = new File(Constants.WEEKLY_REPORT_OUTPUT__FILE_PATH);
+            File weekReport = new File(Constants.WEEKLY_REPORT_OUTPUT_FILE_PATH);
             if (!weekReport.exists()) {
                 logger.debug("文件不存在，准备创建");
                 boolean success = weekReport.createNewFile();
