@@ -6,13 +6,9 @@ import com.adj.workreporter.service.WorkService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.sql.SQLException;
 import java.time.Instant;
-import java.util.Scanner;
 
 /**
  * 每日工作内容入库
@@ -23,23 +19,25 @@ public class DailyGatherWorker {
 
     private WorkService workService = new WorkService();
 
-    public void gather() throws FileNotFoundException, SQLException {
+    public void gather() throws SQLException, IOException {
         File dailyFile = new File(Constants.DAILY_WORKS_DATA_URL);
         if (!dailyFile.exists()) {
             logger.debug("文件不存在 url： " + dailyFile.toURI());
+            dailyFile.createNewFile();
             return;
         }
 
-        try (Scanner scanner = new Scanner(new FileInputStream(dailyFile))) {
-            while (scanner.hasNext()) {
-                String msg = scanner.nextLine();
-                logger.debug("工作内容： " + msg);
-                if (msg != null && msg.trim().length() > 0) {
-                    Work work = new Work(Instant.now().getEpochSecond(), msg.trim());
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(dailyFile), "UTF8"))) {
+            String line = br.readLine();
+            while (line != null) {
+                line = line.trim();
+                if (line.length() != 0) {
+                    logger.debug("工作内容： " + line);
+                    Work work = new Work(Instant.now().getEpochSecond(), line);
                     workService.saveWork(work);
                 }
+                line = br.readLine();
             }
-
         }
 
         try (PrintWriter writer = new PrintWriter(dailyFile)) {
